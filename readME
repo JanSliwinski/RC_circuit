@@ -1,10 +1,4 @@
-Perfect — you’ve got a set of test scripts for relays and the steering motor, all written in Python with `RPi.GPIO`. A **README** will make it much clearer to anyone (including future you) how to run these scripts safely and what each does.
 
-Here’s a professional but practical **README.md** draft for your repo:
-
----
-
-# Rover Electrical Control – Raspberry Pi Tests
 
 This repository contains a collection of Python test scripts for controlling the **relays** and **steering motor** of the Polar rover prototype via a Raspberry Pi.
 These scripts are intended for **bench testing** and **system bring-up**, not for final deployment.
