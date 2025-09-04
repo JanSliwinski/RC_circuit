@@ -1,0 +1,126 @@
+Perfect — you’ve got a set of test scripts for relays and the steering motor, all written in Python with `RPi.GPIO`. A **README** will make it much clearer to anyone (including future you) how to run these scripts safely and what each does.
+
+Here’s a professional but practical **README.md** draft for your repo:
+
+---
+
+# Rover Electrical Control – Raspberry Pi Tests
+
+This repository contains a collection of Python test scripts for controlling the **relays** and **steering motor** of the Polar rover prototype via a Raspberry Pi.
+These scripts are intended for **bench testing** and **system bring-up**, not for final deployment.
+
+---
+
+## ⚠️ Safety First
+
+* Ensure **all main power switches are OFF** before wiring.
+* Verify **no shorts** between positive rail and ground using a multimeter.
+* Power supply should be **current-limited** (start at \~1–2 A).
+* Only run these scripts when the **RPi is properly powered (5 V)** and connected to the relay board / motor driver as per wiring diagrams.
+* Stop immediately if you hear, see, or smell anything unusual.
+
+---
+
+## Repository Contents
+
+### 1. Relay Tests
+
+* **relay\_order\_test.py**
+  Turns each relay ON and OFF in order. Useful to confirm correct wiring.
+
+* **relay\_toggle\_sequence.py**
+  Switches relays one by one with delays. Good for verifying relay click and load switching.
+
+* **relay\_keyboard\_control.py**
+  Interactive script. Press keys (`7`, `8`, `9`, `u`, `i`, `o`) to enable/disable:
+
+  * Steering
+  * Motor controllers
+  * Motors
+    Ensures **controllers are powered before motors**.
+
+---
+
+### 2. Steering Motor Tests
+
+* **steering\_enable\_test.py**
+  Activates steering relay and enable pin for motor driver. Simple ON/OFF sequence.
+
+* **steering\_stepper\_test.py**
+  Pulse/Direction control of the stepper (steering motor). Moves forward and backward in loops. Adjustable:
+
+  * Steps per move
+  * Delay (microseconds per pulse → controls speed)
+
+---
+
+### 3. Example Control Flow
+
+1. Run a **relay test** to ensure switching works:
+
+   ```bash
+   python3 relay_order_test.py
+   ```
+2. Run **keyboard control** for manual power sequencing:
+
+   ```bash
+   python3 relay_keyboard_control.py
+   ```
+
+   Turn on steering → motor controllers → motors.
+3. Run **steering motor test** to check movement:
+
+   ```bash
+   python3 steering_stepper_test.py
+   ```
+
+---
+
+## Requirements
+
+* Raspberry Pi OS (tested on RPi 4B)
+* Python 3
+* Libraries:
+
+  ```bash
+  sudo apt update
+  sudo apt install python3-rpi.gpio
+  ```
+
+---
+
+## GPIO Pin Mapping
+
+| Function            | GPIO Pin (BCM) |
+| ------------------- | -------------- |
+| Relay 1             | 10             |
+| Relay 2             | 9              |
+| Relay 3             | 11             |
+| Relay 4             | 25             |
+| Relay 5             | 8              |
+| Steering Relay      | 11             |
+| Motor Controller 1  | 9              |
+| Motor Controller 2  | 10             |
+| Motor 1 Relay       | 5              |
+| Motor 2 Relay       | 6              |
+| Stepper Pulse (PUL) | 22             |
+| Stepper Direction   | 27             |
+| Stepper Enable      | 4              |
+
+*(Adjust if wiring changes — check diagrams.)*
+
+---
+
+## Notes
+
+* Relays are **active-low** (they engage when GPIO is set LOW).
+* Always clean up GPIO at script exit:
+
+  ```python
+  GPIO.cleanup()
+  ```
+* These are **prototype scripts**. Final integration should use structured modules and possibly ROS2 nodes.
+
+---
+
+Would you like me to also prepare a **short “Quick Start” checklist** (turn on in order → run this script → expected behavior) so you have something you can literally tape to your bench during testing?
